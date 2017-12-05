@@ -30,4 +30,5 @@ export default graphql(query, {
       appType: props.type,
     },
   }),
+  skip: ownProps => ownProps.apps,
 });

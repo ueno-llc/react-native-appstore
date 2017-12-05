@@ -15,29 +15,31 @@ export default class Collection extends PureComponent {
   static propTypes = {
     collection: PropTypes.object.isRequired,
     navigator: PropTypes.object.isRequired,
+    backTitle: PropTypes.string,
     type: PropTypes.string,
   }
 
   static defaultProps = {
+    backTitle: undefined,
     type: undefined,
   }
 
   @autobind
   onAppPress(props) {
-    const { navigator, type } = this.props;
+    const { navigator, backTitle } = this.props;
     pushAppScreen({
       navigator,
-      backTitle: type === 'APP' ? 'Apps' : 'Games',
+      backTitle,
       app: props,
     });
   }
 
   @autobind
   onAppPressIn(props, previewView) {
-    const { navigator, type } = this.props;
+    const { navigator, backTitle } = this.props;
     pushAppScreen({
       navigator,
-      backTitle: type === 'APP' ? 'Apps' : 'Games',
+      backTitle,
       app: props,
       previewView,
     });
@@ -50,7 +52,8 @@ export default class Collection extends PureComponent {
       screen: COLLECTION_SCREEN,
       title: collection.title,
       passProps: {
-        collection,
+        collectionId: collection.id,
+        apps: collection.apps,
       },
     });
   }
@@ -134,6 +137,7 @@ export default class Collection extends PureComponent {
 
     // Show heading?
     const isHeadingShown = (type !== 'FEATURED');
+    const isActionShown = (type !== 'SELLER');
 
     // Dont show empty collections
     if (apps.length === 0) {
@@ -143,7 +147,7 @@ export default class Collection extends PureComponent {
     return (
       <View key={id}>
         {isHeadingShown && (
-          <Heading action="See All" onActionPress={this.onSeeAllPress}>
+          <Heading action={isActionShown && 'See All'} onActionPress={this.onSeeAllPress}>
             {title}
           </Heading>
         )}

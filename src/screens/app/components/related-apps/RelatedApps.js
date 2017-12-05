@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { View } from 'react-native';
 import { autobind } from 'core-decorators';
 import get from 'lodash/get';
-import { APP_LIST_SCREEN } from 'screens';
 import Heading from 'components/heading';
 import AppItemSlider from 'components/app-item-slider';
 import AppItemRow from 'components/app-item-row';
@@ -14,26 +13,21 @@ export default class RelatedApps extends PureComponent {
 
   static propTypes = {
     data: PropTypes.object.isRequired,
-    navigator: PropTypes.object.isRequired,
     onAppPress: PropTypes.func,
     onAppPressIn: PropTypes.func,
+    onSeeAllPress: PropTypes.func,
   }
 
   static defaultProps = {
     onAppPress: undefined,
     onAppPressIn: undefined,
+    onSeeAllPress: undefined,
   }
 
   @autobind
-  onSeeAll() {
-    const { navigator, data } = this.props;
-
-    navigator.push({
-      screen: APP_LIST_SCREEN,
-      title: 'You May Also Like',
-      passProps: {
-        apps: get(data, 'allApps'),
-      },
+  onSeeAllPress() {
+    this.props.onSeeAllPress({
+      apps: get(this.props.data, 'allApps'),
     });
   }
 
@@ -75,7 +69,9 @@ export default class RelatedApps extends PureComponent {
 
     return (
       <View>
-        <Heading action="See All" onActionPress={this.onSeeAll}>You may also like</Heading>
+        <Heading action="See All" onActionPress={this.onSeeAllPress}>
+          You may also like
+        </Heading>
         <AppItemSlider itemsPerPage={2}>
           {related.map(this.renderAppItem)}
         </AppItemSlider>

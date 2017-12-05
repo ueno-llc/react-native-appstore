@@ -6,18 +6,22 @@ import collectionsWithProps from 'graphql/queries/collections';
 import Collection from './components/collection';
 
 @collectionsWithProps
-export default class Games extends Component {
+export default class Collections extends Component {
 
   static propTypes = {
     navigator: PropTypes.object,
     data: PropTypes.object,
     type: PropTypes.string,
+    backTitle: PropTypes.string,
+    apps: PropTypes.array,
   }
 
   static defaultProps = {
     navigator: undefined,
     data: undefined,
     type: undefined,
+    backTitle: undefined,
+    apps: undefined,
   }
 
   static navigatorStyle = {
@@ -27,9 +31,34 @@ export default class Games extends Component {
     navBarBackgroundColor: 'white',
   }
 
+  get collections() {
+    const { apps, data = {} } = this.props;
+    const { allCollections = [] } = data;
+    if (apps) {
+      return [{
+        id: 'Seller.New',
+        appType: 'APP',
+        type: 'SELLER',
+        rows: 1,
+        title: 'Latest Release',
+        apps: apps.slice(0, 1),
+      }, {
+        id: 'Seller.Apps',
+        appType: 'APP',
+        type: 'SELLER',
+        rows: 3,
+        title: 'Apps',
+        apps: apps.slice(1),
+      }];
+    }
+
+    return allCollections;
+  }
+
   keyExtractor(item) {
     return item.key;
   }
+
 
   @autobind
   renderItem({ item }) {
@@ -37,10 +66,10 @@ export default class Games extends Component {
   }
 
   render() {
-    const {
-      error,
-      allCollections = [],
-    } = this.props.data;
+    const { type, navigator } = this.props;
+    const { error } = this.props.data || {};
+
+    const backTitle = this.props.backTitle || (type === 'APP' ? 'Apps' : 'Games');
 
     if (error) {
       console.log('Error while fetching data %o', error);
@@ -52,12 +81,13 @@ export default class Games extends Component {
         renderItem={this.renderItem}
         keyExtractor={this.keyExtractor}
         data={[
-          ...allCollections.map(collection => (
+          ...this.collections.map(collection => (
             <Collection
               key={collection.id}
-              type={this.props.type}
-              navigator={this.props.navigator}
+              type={type}
+              navigator={navigator}
               collection={collection}
+              backTitle={backTitle}
             />
           )),
           <View key="gutter" style={styles.gutter} />,

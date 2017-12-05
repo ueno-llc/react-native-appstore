@@ -3,19 +3,26 @@ import { StyleSheet, FlatList } from 'react-native';
 import PropTypes from 'prop-types';
 import { pushAppScreen } from 'screens';
 import AppItemRowLarge from 'components/app-item-row-large';
-import collectionWithProps from 'graphql/queries/collection';
+import collectionFromProps from 'graphql/queries/collection';
 import { autobind } from 'core-decorators';
 
-@collectionWithProps
+/**
+ * Collection shows a single list of apps from multiple sources.
+ * @property collectionId
+ * @property relatedAppId
+ * @property ...
+ */
+@collectionFromProps
 export default class Collection extends Component {
 
   static propTypes = {
     navigator: PropTypes.object.isRequired,
     data: PropTypes.object.isRequired,
+    backTitle: PropTypes.string,
   }
 
   static defaultProps = {
-    // children: undefined,
+    backTitle: 'Back',
   }
 
   static navigatorStyle = {
@@ -27,20 +34,20 @@ export default class Collection extends Component {
 
   @autobind
   onPress(props) {
-    const { navigator, data } = this.props;
+    const { navigator, backTitle } = this.props;
     pushAppScreen({
       navigator,
-      backTitle: data.Collection.title,
+      backTitle,
       app: props,
     });
   }
 
   @autobind
   onPressIn(props, previewView) {
-    const { navigator, data } = this.props;
+    const { navigator, backTitle } = this.props;
     pushAppScreen({
       navigator,
-      backTitle: data.Collection.title,
+      backTitle,
       app: props,
       previewView,
     });
@@ -71,11 +78,11 @@ export default class Collection extends Component {
   }
 
   render() {
-    const { Collection: collection } = this.props.data;
+    const { apps } = this.props.data;
     return (
       <FlatList
         style={styles.host}
-        data={collection.apps || []}
+        data={apps || []}
         renderItem={this.renderItem}
         keyExtractor={this.keyExtractor}
       />

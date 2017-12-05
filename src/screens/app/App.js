@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, Animated, View, Text } from 'react-native';
 import { inject, observer } from 'mobx-react/native';
 import { autobind } from 'core-decorators';
-import { DEVELOPER_SCREEN, REVIEWS_SCREEN, VERSIONS_SCREEN, pushAppScreen } from 'screens';
+import { COLLECTIONS_SCREEN, COLLECTION_SCREEN, REVIEWS_SCREEN, VERSIONS_SCREEN, pushAppScreen } from 'screens';
 import PropTypes from 'prop-types';
 import Heading from 'components/heading';
 import Divider from 'components/divider';
@@ -85,17 +85,6 @@ export default class App extends Component {
   }
 
   @autobind
-  onDeveloperPress({ id, name }) {
-    this.props.navigator.push({
-      screen: DEVELOPER_SCREEN,
-      title: name,
-      passProps: {
-        id,
-      },
-    });
-  }
-
-  @autobind
   onReviewsPress() {
     this.props.navigator.push({
       screen: REVIEWS_SCREEN,
@@ -112,7 +101,7 @@ export default class App extends Component {
       screen: REVIEWS_SCREEN,
       title: 'Ratings & Reviews',
       passProps: {
-        id,
+        reviewId: id,
       },
     });
   }
@@ -145,6 +134,32 @@ export default class App extends Component {
       backTitle: 'Back',
       app: props,
       previewView,
+    });
+  }
+
+  @autobind
+  onSellerSeeAllPress() {
+    const seller = get(this.props.data, 'App.seller');
+    this.props.navigator.push({
+      screen: COLLECTIONS_SCREEN,
+      title: seller.name,
+      passProps: {
+        apps: seller.apps,
+      },
+    });
+  }
+
+  @autobind
+  onRelatedSeeAllPress({ apps }) {
+    // Get seller info
+    this.props.navigator.push({
+      screen: COLLECTION_SCREEN,
+      title: 'Related Apps',
+      passProps: {
+        type: 'RELATED_APPS',
+        relatedAppId: this.props.id,
+        apps, // Cached list of apps
+      },
     });
   }
 
@@ -218,7 +233,7 @@ export default class App extends Component {
 
         <Description
           seller={get(app, 'seller')}
-          onDeveloperPress={this.onDeveloperPress}
+          onDeveloperPress={this.onSellerSeeAllPress}
         >
           {get(app, 'description')}
         </Description>
@@ -260,14 +275,15 @@ export default class App extends Component {
             seller={get(app, 'seller')}
             onAppPress={this.onAppPress}
             onAppPressIn={this.onAppPressIn}
+            onSeeAllPress={this.onSellerSeeAllPress}
           />
           <RelatedApps
             id={app.id}
-            navigator={navigator}
             type={app.type}
             categories={app.categories.map(c => c.id)}
             onAppPress={this.onAppPress}
             onAppPressIn={this.onAppPressIn}
+            onSeeAllPress={this.onRelatedSeeAllPress}
           />
           <Divider />
           <View style={styles.copyright}>
