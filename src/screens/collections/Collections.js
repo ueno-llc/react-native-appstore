@@ -7,20 +7,23 @@ import sellerWithProps from 'graphql/queries/seller';
 import Collection from './components/collection';
 import sellerCollectionsHoc from './utils/sellerCollectionsHoc';
 
-class Collections extends Component {
+@collectionsWithProps
+export default class Collections extends Component {
 
   static propTypes = {
     navigator: PropTypes.object,
     data: PropTypes.object,
     type: PropTypes.string,
-    title: PropTypes.string,
+    backTitle: PropTypes.string,
+    apps: PropTypes.array,
   }
 
   static defaultProps = {
     navigator: undefined,
     data: undefined,
     type: undefined,
-    title: undefined,
+    backTitle: undefined,
+    apps: undefined,
   }
 
   static navigatorStyle = {
@@ -30,9 +33,34 @@ class Collections extends Component {
     navBarBackgroundColor: 'white',
   }
 
+  get collections() {
+    const { apps, data = {} } = this.props;
+    const { allCollections = [] } = data;
+    if (apps) {
+      return [{
+        id: 'Seller.New',
+        appType: 'APP',
+        type: 'SELLER',
+        rows: 1,
+        title: 'Latest Release',
+        apps: apps.slice(0, 1),
+      }, {
+        id: 'Seller.Apps',
+        appType: 'APP',
+        type: 'SELLER',
+        rows: 3,
+        title: 'Apps',
+        apps: apps.slice(1),
+      }];
+    }
+
+    return allCollections;
+  }
+
   keyExtractor(item) {
     return item.key;
   }
+
 
   @autobind
   renderItem({ item }) {
@@ -40,10 +68,10 @@ class Collections extends Component {
   }
 
   render() {
-    const {
-      error,
-      allCollections = [],
-    } = this.props.data;
+    const { type, navigator } = this.props;
+    const { error } = this.props.data || {};
+
+    const backTitle = this.props.backTitle || (type === 'APP' ? 'Apps' : 'Games');
 
     if (error) {
       console.log('Error while fetching data %o', error);
@@ -55,14 +83,14 @@ class Collections extends Component {
         renderItem={this.renderItem}
         keyExtractor={this.keyExtractor}
         data={[
-          ...allCollections.map(collection => (
+          ...this.collections.map(collection => (
             <Collection
               showAction
               key={collection.id}
-              type={this.props.type}
-              backTitle={this.props.title}
-              navigator={this.props.navigator}
+              type={type}
+              navigator={navigator}
               collection={collection}
+              backTitle={backTitle}
             />
           )),
           <View key="gutter" style={styles.gutter} />,

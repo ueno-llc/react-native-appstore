@@ -6,11 +6,10 @@ import CollectionsScreen, {
   SellerCollectionsScreen,
 } from './collections';
 import CollectionScreen from './collection';
-import AppScreen, { AppListScreen } from './app';
+import AppScreen from './app';
 import AppToolbar from './app/components/toolbar';
 import AppButton from './app/components/button';
 import ScreenshotScreen from './screenshot';
-import DeveloperScreen from './developer';
 import ReviewsScreen from './reviews';
 import VersionsScreen from './versions';
 import UpdatesScreen from './updates';
@@ -24,11 +23,9 @@ export const COLLECTIONS_SCREEN = 'appStoreClone.CollectionsScreen';
 export const SELLER_COLLECTIONS_SCREEN = 'appStoreClone.SellerCollectionsScreen';
 export const COLLECTION_SCREEN = 'appStoreClone.CollectionScreen';
 export const APP_SCREEN = 'appStoreClone.AppScreen';
-export const APP_LIST_SCREEN = 'appStoreClone.AppListScreen';
 export const APP_TOOLBAR = 'appStoreClone.AppToolbar';
 export const APP_BUTTON = 'appStoreClone.AppButton';
 export const SCREENSHOT_SCREEN = 'appStoreClone.ScreenshotScreen';
-export const DEVELOPER_SCREEN = 'appStoreClone.DeveloperScreen';
 export const REVIEWS_SCREEN = 'appStoreClone.ReviewsScreen';
 export const VERSIONS_SCREEN = 'appStoreClone.VersionsScreen';
 export const UPDATES_SCREEN = 'appStoreClone.UpdatesScreen';
@@ -41,11 +38,9 @@ Screens.set(COLLECTIONS_SCREEN, () => CollectionsScreen);
 Screens.set(SELLER_COLLECTIONS_SCREEN, () => SellerCollectionsScreen);
 Screens.set(COLLECTION_SCREEN, () => CollectionScreen);
 Screens.set(APP_SCREEN, () => AppScreen);
-Screens.set(APP_LIST_SCREEN, () => AppListScreen);
 Screens.set(APP_TOOLBAR, () => AppToolbar);
 Screens.set(APP_BUTTON, () => AppButton);
 Screens.set(SCREENSHOT_SCREEN, () => ScreenshotScreen);
-Screens.set(DEVELOPER_SCREEN, () => DeveloperScreen);
 Screens.set(REVIEWS_SCREEN, () => ReviewsScreen);
 Screens.set(VERSIONS_SCREEN, () => VersionsScreen);
 Screens.set(UPDATES_SCREEN, () => UpdatesScreen);
@@ -94,7 +89,12 @@ export const startApp = () => {
 };
 
 // Push app screen (helper function)
-export const pushAppScreen = ({ navigator, app, backTitle, previewView }) => navigator.push({
+export const pushAppScreen = ({
+  navigator,
+  app,
+  backTitle,
+  previewView,
+}) => navigator.push({
   screen: APP_SCREEN,
   backButtonTitle: backTitle,
   backButtonHidden: false,

@@ -15,12 +15,14 @@ export default class Collection extends PureComponent {
   static propTypes = {
     collection: PropTypes.object.isRequired,
     navigator: PropTypes.object.isRequired,
+    backTitle: PropTypes.string,
     type: PropTypes.string,
     backTitle: PropTypes.string,
     showAction: PropTypes.bool,
   }
 
   static defaultProps = {
+    backTitle: undefined,
     type: undefined,
     backTitle: undefined,
     showAction: false,
@@ -54,7 +56,8 @@ export default class Collection extends PureComponent {
       screen: COLLECTION_SCREEN,
       title: collection.title,
       passProps: {
-        collection,
+        collectionId: collection.id,
+        apps: collection.apps,
       },
     });
   }
@@ -139,6 +142,7 @@ export default class Collection extends PureComponent {
 
     // Show heading?
     const isHeadingShown = (type !== 'FEATURED');
+    const isActionShown = (type !== 'SELLER');
 
     // Dont show empty collections
     if (apps.length === 0) {
@@ -148,7 +152,7 @@ export default class Collection extends PureComponent {
     return (
       <View key={id}>
         {isHeadingShown && (
-          <Heading action={showAction ? 'See All' : undefined} onActionPress={this.onSeeAllPress}>
+          <Heading action={isActionShown && 'See All'} onActionPress={this.onSeeAllPress}>
             {title}
           </Heading>
         )}

@@ -1,2 +1,1 @@
-export default from './App';
-export AppListScreen from './List';
+export { default } from './App';
