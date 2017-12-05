@@ -2,7 +2,9 @@ import { Navigation } from 'react-native-navigation';
 import { toJS } from 'mobx';
 import SplashScreen from './splash';
 import TodayScreen from './today';
-import CollectionsScreen from './collections';
+import CollectionsScreen, {
+  SellerCollectionsScreen,
+} from './collections';
 import CollectionScreen from './collection';
 import AppScreen from './app';
 import AppToolbar from './app/components/toolbar';
@@ -18,6 +20,7 @@ export const Screens = new Map();
 export const SPLASH_SCREEN = 'appStoreClone.SplashScreen';
 export const TODAY_SCREEN = 'appStoreClone.TodayScreen';
 export const COLLECTIONS_SCREEN = 'appStoreClone.CollectionsScreen';
+export const SELLER_COLLECTIONS_SCREEN = 'appStoreClone.SellerCollectionsScreen';
 export const COLLECTION_SCREEN = 'appStoreClone.CollectionScreen';
 export const APP_SCREEN = 'appStoreClone.AppScreen';
 export const APP_TOOLBAR = 'appStoreClone.AppToolbar';
@@ -32,6 +35,7 @@ export const SEARCH_SCREEN = 'appStoreClone.SearchScreen';
 Screens.set(SPLASH_SCREEN, () => SplashScreen);
 Screens.set(TODAY_SCREEN, () => TodayScreen);
 Screens.set(COLLECTIONS_SCREEN, () => CollectionsScreen);
+Screens.set(SELLER_COLLECTIONS_SCREEN, () => SellerCollectionsScreen);
 Screens.set(COLLECTION_SCREEN, () => CollectionScreen);
 Screens.set(APP_SCREEN, () => AppScreen);
 Screens.set(APP_TOOLBAR, () => AppToolbar);

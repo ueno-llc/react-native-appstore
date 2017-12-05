@@ -17,11 +17,15 @@ export default class Collection extends PureComponent {
     navigator: PropTypes.object.isRequired,
     backTitle: PropTypes.string,
     type: PropTypes.string,
+    backTitle: PropTypes.string,
+    showAction: PropTypes.bool,
   }
 
   static defaultProps = {
     backTitle: undefined,
     type: undefined,
+    backTitle: undefined,
+    showAction: false,
   }
 
   @autobind
@@ -103,13 +107,14 @@ export default class Collection extends PureComponent {
 
   render() {
     // Get needed props from collection
+    const { collection, showAction } = this.props;
     const {
       id,
       apps = [],
       type,
       rows,
       title,
-    } = this.props.collection;
+    } = collection;
 
     // Content of the collection section
     let content = (

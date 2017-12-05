@@ -7,6 +7,7 @@ export const query = gql`
     App(id: $id) {
       ...AppFragment
       seller {
+        id
         name
         apps(filter: { id_not: $id }) {
           ...AppFragment

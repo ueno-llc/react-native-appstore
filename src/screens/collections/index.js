@@ -1,1 +1,1 @@
-export { default } from './Collections';
+export { default, SellerCollectionsScreen } from './Collections';
